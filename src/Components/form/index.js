@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ColorRing } from "react-loader-spinner";
+import Dashboard from "../dashboard";
 
 
 const FormPage = () => {
@@ -8,6 +10,9 @@ const FormPage = () => {
     email: '',
     password: '',
   });
+
+const [loading, setLoading] = useState(false);
+const [verify, setVerify] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,19 +22,29 @@ const FormPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check if email and password are correct
-    if (formInput.email === 'admin@mail.com' && formInput.password === 'password') {
-      // Display toast message for successful login
-      toast.success('Welcome to your homepage', { autoClose: 1000 });
-    } else {
-      // Display toast message for invalid login
-      toast.error('Invalid email or password', { autoClose: 1000 });
-    }
-   
+if (
+    formInput.email === "admin@mail.com" &&
+    formInput.password === "password"
+  ) {
+    
+    setLoading(true);
+
+    setTimeout(() => {
+      
+      setLoading(false);
+      setVerify(true);
+    }, 1000);
+  } else {
+ 
+    toast.error("Wrong email or password",  { autoClose: 1500 })
+  }
   };
 
   return (
     <div className="container">
+{verify ? (
+    <Dashboard />
+  ) : (
       <form onSubmit={handleSubmit}>
     <img src="https://i.imgur.com/yXOvdOSs.jpg" className="image"/>
         <h1 className="heading">Welcome back</h1>
@@ -50,19 +65,27 @@ const FormPage = () => {
             placeholder="Password"
             onChange={handleChange}
             className="input-box"
-          />
+/>
         </div>
         <p className="f-password">Forgot your password?</p>
         <button type="submit" className="btn">LOGIN</button>
         <div className="last-text">Don't have an account? <button type="submit" className="sign">Sign Up</button></div>
       </form>
-      {/* Add the ToastContainer to display toast messages */}
+       )}
+  
       <ToastContainer />
+           {loading && (
+        <ColorRing/>
+      )}
+
     </div>
   );
 };
 
 export default FormPage;
+
+
+
 
 
 
